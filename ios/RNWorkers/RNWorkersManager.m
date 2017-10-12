@@ -37,16 +37,16 @@
 {
     NSNumber *nsPort = [NSNumber numberWithInt:port];
     NSURL *jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:bundle fallbackResource:resource];
-    
+
     #if RCT_DEV
-  
+
     if([preferResourceEnabled boolValue] ==  YES){
         if(resource == nil){
             [NSException raise:@"rn-worker" format:@"preferResourceEnabled is enabled but no resource was provided"];
         }
-        
+
         jsCodeLocation = [[NSBundle mainBundle] URLForResource:resource withExtension:@"jsbundle"];
-        
+
         if(jsCodeLocation == nil){
             [NSException raise:@"rn-worker" format:@"JS bundle '%@.jsbundle' not found", resource];
         }
@@ -56,10 +56,10 @@
         NSString *path = [jsCodeLocation.absoluteString stringByReplacingOccurrencesOfString:appPort withString:workerPort];
         jsCodeLocation = [[NSURL alloc] initWithString:path];
     }
-    
+
     #endif
-    
-    
+
+
     if([simulationEnabled boolValue] ==  NO){
         RCTBridge *worker = [[RCTBridge alloc] initWithBundleURL:jsCodeLocation
                                        moduleProvider:nil
@@ -68,14 +68,22 @@
     }else {
         [workerDictionary setObject:nsPort forKey:nsPort];
     }
-    
-    
-    
+
+
+
 }
 
 - (void) startWorkersWithRootView: (RCTRootView*) rootView
 {
     mainBridge = rootView.bridge;
+    if([simulationEnabled boolValue] == YES){
+        [self fillDictionaryWithMainBridge];
+    }
+}
+
+- (void) startWorkersWithBridge: (RCTBridge *) bridge
+{
+    mainBridge = bridge;
     if([simulationEnabled boolValue] == YES){
         [self fillDictionaryWithMainBridge];
     }
