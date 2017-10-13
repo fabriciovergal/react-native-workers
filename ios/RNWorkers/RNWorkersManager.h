@@ -17,6 +17,7 @@
 - (void) initWorker;
 - (void) initWorkerWithPort:(int) port bundleRoot:(NSString*) bundle fallbackResouce:(NSString*) resource;
 - (void) startWorkersWithRootView: (RCTRootView*) rootView;
+- (void) startWorkersWithBridge: (RCTBridge*) bridge;
 
 @property (nonatomic, strong, readonly) NSMutableDictionary *workerDictionary;
 @property (nonatomic, strong, readonly) RCTBridge *mainBridge;
